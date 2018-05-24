@@ -53,12 +53,12 @@ return [
         //     ],
         // ],
 
-        'view' =>[
-            'theme' => [
-                'pathMap' => ['@app/views' => '@app/theme/AdminLTE-3.0.0-alpha'],
-                    'baseUrl'   => '@web/../theme/AdminLTE-3.0.0-alpha'
-            ],
-        ],
+        // 'view' =>[
+        //     'theme' => [
+        //         'pathMap' => ['@app/views' => '@app/theme/AdminLTE-2.4.3'],
+        //             'baseUrl'   => '@web/../theme/AdminLTE-2.4.3'
+        //     ],
+        // ],
     ],
     'params' => $params,
 ];

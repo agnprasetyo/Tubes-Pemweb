@@ -52,12 +52,12 @@ return [
         //     ],
         // ],
 
-        'view' =>[
-            'theme' => [
-                'pathMap' => ['@app/views' => '@app/theme/interior'],
-                    'baseUrl'   => '@web/../theme/interior'
-            ],
-        ],
+        // 'view' =>[
+        //     'theme' => [
+        //         'pathMap' => ['@app/views' => '@app/theme/interior'],
+        //             'baseUrl'   => '@web/../theme/interior'
+        //     ],
+        // ],
     ],
     'params' => $params,
 ];
