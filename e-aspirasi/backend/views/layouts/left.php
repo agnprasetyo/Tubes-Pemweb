@@ -40,9 +40,9 @@
                       ],
                     ],
                     ['label' => 'Lodge Complaint', 'icon' => 'fa fa-book', 'url' => ['/debug']],
-                    ['label' => 'Laporan Infrastruktur', 'icon' => 'dashboard', 'url' => ['/debug']],
-                    ['label' => 'Laporan Layanan', 'icon' => 'dashboard', 'url' => ['/debug']],
-                    ['label' => 'Laporan Detail', 'icon' => 'dashboard', 'url' => ['/debug']],
+                    ['label' => 'Laporan Infrastruktur', 'icon' => 'dashboard', 'url' => ['/transaksi-infrastruktur']],
+                    ['label' => 'Laporan Layanan', 'icon' => 'dashboard', 'url' => ['/transaksi-pelayanan']],
+                    ['label' => 'Laporan Gangguan Keamanan', 'icon' => 'dashboard', 'url' => ['/transaksi-gangguan-keamanan']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Some tools',
