@@ -36,28 +36,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+        
+        /*'urlManager' => [
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,
             'rules' => [
             ],
-        ],
-        */
-        // 'view' => [
-        //     'theme' => [
-        //         'pathMap' => [
-        //             '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
-        //         ],
-        //     ],
-        // ],
-
-        // 'view' =>[
-        //     'theme' => [
-        //         'pathMap' => ['@app/views' => '@app/theme/interior'],
-        //             'baseUrl'   => '@web/../theme/interior'
-        //     ],
-        // ],
+        ],*/
+        
     ],
     'params' => $params,
 ];
