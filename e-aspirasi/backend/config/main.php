@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Aspirasi-el',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -53,12 +54,11 @@ return [
         //     ],
         // ],
 
-        // 'view' =>[
-        //     'theme' => [
-        //         'pathMap' => ['@app/views' => '@app/theme/AdminLTE-2.4.3'],
-        //             'baseUrl'   => '@web/../theme/AdminLTE-2.4.3'
-        //     ],
-        // ],
     ],
     'params' => $params,
+    'modules' => [
+      'gridview' =>  [
+         'class' => '\kartik\grid\Module'
+      ]
+    ],
 ];

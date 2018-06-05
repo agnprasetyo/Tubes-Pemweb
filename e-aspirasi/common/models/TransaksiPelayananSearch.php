@@ -8,23 +8,23 @@ use yii\data\ActiveDataProvider;
 use common\models\TransaksiPelayanan;
 
 /**
- * TransaksiPelayananSearch represents the model behind the search form of `common\models\TransaksiPelayanan`.
+ * TransaksiPelayananSearch represents the model behind the search form about `common\models\TransaksiPelayanan`.
  */
 class TransaksiPelayananSearch extends TransaksiPelayanan
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id_pelayanan', 'id_user', 'id_wilayah', 'id_review'], 'integer'],
+            [['id_pelayanan', 'id_user', 'id_wilayah', 'id_tempat', 'id_review'], 'integer'],
             [['tanggal', 'jenis_layanan'], 'safe'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class TransaksiPelayananSearch extends TransaksiPelayanan
     {
         $query = TransaksiPelayanan::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,12 +55,12 @@ class TransaksiPelayananSearch extends TransaksiPelayanan
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id_pelayanan' => $this->id_pelayanan,
             'id_user' => $this->id_user,
             'tanggal' => $this->tanggal,
             'id_wilayah' => $this->id_wilayah,
+            'id_tempat' => $this->id_tempat,
             'id_review' => $this->id_review,
         ]);
 

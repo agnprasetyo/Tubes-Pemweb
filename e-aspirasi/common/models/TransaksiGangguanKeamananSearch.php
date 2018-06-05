@@ -8,23 +8,23 @@ use yii\data\ActiveDataProvider;
 use common\models\TransaksiGangguanKeamanan;
 
 /**
- * TransaksiGangguanKeamananSearch represents the model behind the search form of `common\models\TransaksiGangguanKeamanan`.
+ * TransaksiGangguanKeamananSearch represents the model behind the search form about `common\models\TransaksiGangguanKeamanan`.
  */
 class TransaksiGangguanKeamananSearch extends TransaksiGangguanKeamanan
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id_gangguan', 'id_user', 'id_wilayah'], 'integer'],
+            [['id_gangguan', 'id_user', 'id_wilayah', 'longitude', 'latitude'], 'integer'],
             [['tanggal', 'jenis_kejahatan'], 'safe'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class TransaksiGangguanKeamananSearch extends TransaksiGangguanKeamanan
     {
         $query = TransaksiGangguanKeamanan::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,12 +55,13 @@ class TransaksiGangguanKeamananSearch extends TransaksiGangguanKeamanan
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id_gangguan' => $this->id_gangguan,
             'id_user' => $this->id_user,
             'tanggal' => $this->tanggal,
             'id_wilayah' => $this->id_wilayah,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
         ]);
 
         $query->andFilterWhere(['like', 'jenis_kejahatan', $this->jenis_kejahatan]);

@@ -8,23 +8,23 @@ use yii\data\ActiveDataProvider;
 use common\models\TransaksiInfrastruktur;
 
 /**
- * TransaksiInfrastrukturSearch represents the model behind the search form of `common\models\TransaksiInfrastruktur`.
+ * TransaksiInfrastrukturSearch represents the model behind the search form about `common\models\TransaksiInfrastruktur`.
  */
 class TransaksiInfrastrukturSearch extends TransaksiInfrastruktur
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id_infrastruktur', 'id_user'], 'integer'],
-            [['tanggal', 'jenis_infrastruktur', 'id_status', 'tanggal_input', 'id_wilayah', 'id_bukti'], 'safe'],
+            [['id_infrastruktur', 'id_user', 'longitude', 'latitude', 'id_status', 'id_wilayah'], 'integer'],
+            [['tanggal', 'jenis_infrastruktur', 'tanggal_input'], 'safe'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scenarios()
     {
@@ -43,8 +43,6 @@ class TransaksiInfrastrukturSearch extends TransaksiInfrastruktur
     {
         $query = TransaksiInfrastruktur::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,18 +55,18 @@ class TransaksiInfrastrukturSearch extends TransaksiInfrastruktur
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id_infrastruktur' => $this->id_infrastruktur,
             'id_user' => $this->id_user,
             'tanggal' => $this->tanggal,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
+            'id_status' => $this->id_status,
             'tanggal_input' => $this->tanggal_input,
+            'id_wilayah' => $this->id_wilayah,
         ]);
 
-        $query->andFilterWhere(['like', 'jenis_infrastruktur', $this->jenis_infrastruktur])
-            ->andFilterWhere(['like', 'id_status', $this->id_status])
-            ->andFilterWhere(['like', 'id_wilayah', $this->id_wilayah])
-            ->andFilterWhere(['like', 'id_bukti', $this->id_bukti]);
+        $query->andFilterWhere(['like', 'jenis_infrastruktur', $this->jenis_infrastruktur]);
 
         return $dataProvider;
     }

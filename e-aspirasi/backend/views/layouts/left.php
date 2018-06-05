@@ -8,7 +8,7 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p>Informatika UNS</p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -30,19 +30,14 @@
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/debug']],
-                    ['label' => 'Account Setting', 'icon' => 'dashboard', 'url' => '#',
-                    'items' => [
-                        ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                        ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                      ],
-                    ],
-                    ['label' => 'Lodge Complaint', 'icon' => 'fa fa-book', 'url' => ['/debug']],
-                    ['label' => 'Laporan Infrastruktur', 'icon' => 'dashboard', 'url' => ['/transaksi-infrastruktur']],
-                    ['label' => 'Laporan Layanan', 'icon' => 'dashboard', 'url' => ['/transaksi-pelayanan']],
-                    ['label' => 'Laporan Gangguan Keamanan', 'icon' => 'dashboard', 'url' => ['/transaksi-gangguan-keamanan']],
+                    ['label' => 'MENU UTAMA', 'options' => ['class' => 'header']],
+                    // ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
+                    // ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/debug']],
+                    ['label' => 'Home', 'icon' => 'home', 'url' => ['/site']],
+                    ['label' => 'Laporan Aspirasi Infrastruktur', 'icon' => 'edit', 'url' => ['/transaksi-infrastruktur']],
+                    ['label' => 'Laporan Aspirasi pelayanan', 'icon' => 'edit', 'url' => ['/transaksi-pelayanan']],
+                    ['label' => 'Laporan Gangguan Keamanan', 'icon' => 'edit', 'url' => ['/transaksi-gangguan-keamanan']],
+                    ['label' => 'Detail Laporan Aspirasi', 'icon' => 'navicon', 'url' => ['/transaksi-gangguan-keamanan']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Some tools',

@@ -3,38 +3,39 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
+
+use common\models\User;
+
+use frontend\components\BaseController;
+use frontend\models\ContactForm;
+use frontend\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
-use frontend\models\ContactForm;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['login', 'signup', 'reset-password', 'request-password-reset', 'validate-account', 'error'],
                         'allow' => true,
-                        'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -43,14 +44,15 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
+
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function actions()
     {
@@ -86,12 +88,12 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+        $this->layout = '//no-sidebar';
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            $model->password = '';
-
             return $this->render('login', [
                 'model' => $model,
             ]);
@@ -105,7 +107,9 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        if (Yii::$app->user->logout()) {
+            Yii::$app->session->setFlash('success', 'You have been logged out!');
+        }
 
         return $this->goHome();
     }
@@ -119,7 +123,7 @@ class SiteController extends Controller
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+            if ($model->sendEmail(Yii::$app->params['contactEmail'])) {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error sending your message.');
@@ -150,9 +154,34 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        $this->layout = '//no-sidebar';
+
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($user = $model->signup())
+            {
+                if (Yii::$app->params['signupValidation'] === true)
+                {
+                    $mailed = Yii::$app
+                        ->mailer
+                        ->compose(
+                            ['html' => 'accountValidation-html', 'text' => 'accountValidation-text'],
+                            ['user' => $user]
+                        )
+                        ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' Alerts'])
+                        ->setTo($model->email)
+                        ->setSubject('Account Activation Required')
+                        ->send();
+
+                    if (!$mailed) {
+                        throw new HttpException(500, 'Error sending validation link! Please contact support.', 'Mailer Error!');
+                    }
+
+                    Yii::$app->session->setFlash('success', 'Your account has been created. Before you can login, you must click the verification link in your email.');
+                    return Yii::$app->getResponse()->redirect(Yii::$app->user->loginUrl);
+                }
+
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
@@ -171,9 +200,13 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        $this->layout = '//no-sidebar';
+
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail())
+            {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
                 return $this->goHome();
@@ -196,6 +229,8 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        $this->layout = '//no-sidebar';
+
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -203,7 +238,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', 'Your password has been reset!');
 
             return $this->goHome();
         }
@@ -211,5 +246,41 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Validate Account.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionValidateAccount($token)
+    {
+        if (empty($token) || !is_string($token)) {
+            throw new InvalidParamException('Validation token cannot be blank!');
+        }
+
+        $user = User::findByValidationToken($token);
+
+        if (!$user) {
+            throw new InvalidParamException('Invalid validation token or account already validated!');
+        }
+
+        $user->status = User::STATUS_ACTIVE;
+        $user->removeValidationToken();
+
+        if ( $user->update() )
+        {
+            Yii::$app->session->setFlash('success', 'Your account has been activated!');
+
+            if (Yii::$app->getUser()->login($user)) {
+                return $this->goHome();
+            }
+        }
+
+        throw new HttpException(500, 'There was an error activating your account. Please contact support.');
+
+
     }
 }

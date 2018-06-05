@@ -1,4 +1,5 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'signupValidation' => true,
+    'user.passwordResetTokenExpire' => 48 * 60 * 60
 ];

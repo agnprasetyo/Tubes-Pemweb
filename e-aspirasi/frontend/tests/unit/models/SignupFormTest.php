@@ -1,7 +1,7 @@
 <?php
 namespace frontend\tests\unit\models;
 
-use common\fixtures\UserFixture;
+use common\fixtures\User as UserFixture;
 use frontend\models\SignupForm;
 
 class SignupFormTest extends \Codeception\Test\Unit
@@ -28,6 +28,7 @@ class SignupFormTest extends \Codeception\Test\Unit
             'username' => 'some_username',
             'email' => 'some_email@example.com',
             'password' => 'some_password',
+            'confirmPassword' => 'some_password',
         ]);
 
         $user = $model->signup();
@@ -42,9 +43,10 @@ class SignupFormTest extends \Codeception\Test\Unit
     public function testNotCorrectSignup()
     {
         $model = new SignupForm([
-            'username' => 'troy.becker',
-            'email' => 'nicolas.dianna@hotmail.com',
+            'username' => 'testuser1',
+            'email' => 'testuser1@example.com',
             'password' => 'some_password',
+            'confirmPassword' => 'some_password',
         ]);
 
         expect_not($model->signup());

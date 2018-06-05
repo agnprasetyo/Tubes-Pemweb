@@ -23,13 +23,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'jenis_infrastruktur') ?>
 
-    <?= $form->field($model, 'id_status') ?>
+    <?= $form->field($model, 'longitude') ?>
+
+    <?php // echo $form->field($model, 'latitude') ?>
+
+    <?php // echo $form->field($model, 'id_status') ?>
 
     <?php // echo $form->field($model, 'tanggal_input') ?>
 
     <?php // echo $form->field($model, 'id_wilayah') ?>
-
-    <?php // echo $form->field($model, 'id_bukti') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
